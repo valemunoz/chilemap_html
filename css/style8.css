@@ -1,0 +1,149 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background: #f4efe5;
+    font: bold 14px 'Open Sans', sans-serif;
+}
+header, nav{
+    display: block;
+}
+
+/* Definimos un ancho 100% y una altura fija para nuestro menú */
+
+
+/* El logo sera flotado a la izquierda */
+
+
+/* Nuestro nav con id #menu lo flotaremos a la derecha*/
+#menu{float: right;width: 100%;}   
+
+    /* Quitamos estilos por defecto de el tag UL */
+    #menu ul{
+        list-style: none;
+        font-size: 14px;
+    }
+        
+        /* Centramos y ponemos los textos en mayuscula */
+        #menu li{
+           display: block;
+           
+          
+           text-align: center;
+        }
+            
+            /* Damos estilo a nuestros enlaces */
+            #menu li a{
+               display: block;
+color: #000 !important;
+text-decoration: none;
+height: 26px;
+line-height: 26px;
+padding: 0 10px;
+ -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        box-shadow:inset 0px 1px 0px 0px #ffffff;
+        
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f9f9f9), color-stop(1, #e9e9e9));
+        background:-moz-linear-gradient(top, #f9f9f9 5%, #e9e9e9 100%);
+        background:-webkit-linear-gradient(top, #f9f9f9 5%, #e9e9e9 100%);
+        background:-o-linear-gradient(top, #f9f9f9 5%, #e9e9e9 100%);
+        background:-ms-linear-gradient(top, #f9f9f9 5%, #e9e9e9 100%);
+        background:linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9f9f9', endColorstr='#e9e9e9',GradientType=0);
+        
+        background-color:#f9f9f9;
+border:1px solid #dcdcdc;
+text-shadow:0px 1px 0px #ffffff;
+text-align: left;
+font-size: 12px;
+            }
+         
+    
+    /* Estilos #nav-mobile y lo ocultamos */
+    #nav-mobile{
+        display: none;
+        background: url(nav.png) no-repeat center center;
+        float: right;
+        width: 60px;
+        height: 37px;
+        
+        right: 0;
+        top:0;
+        opacity: .6;
+
+    }   
+        /* Agregaremos esta clase a #nav-mobile, cuando el menu mobile haya sido desplegado */
+        #nav-mobile.nav-active{
+            opacity: 1;
+        }
+
+/* Content */
+#content{
+    width: 80%;
+    margin: 60px 10%;
+    text-align: center;
+    overflow: hidden;
+}
+    h2{
+        font-size: 50px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #624c3f;
+    }
+
+
+/*
+    MEDIA QUERY
+*/
+
+@media only screen and (max-width: 768px) {
+        
+    h2{font-size: 40px;}
+    
+    /* mostramos #nav-mobile */
+    #nav-mobile{ display: block; }
+
+    /* Fijamos nuestro nav en 100% ancho y dejamos de flotarlo  */
+    #menu{
+        width: 100%;
+        float: none;
+        padding-top: 37px;
+    }
+        /* Convertimos nuestra lista de enlaces en un menú horizontal */
+        #menu ul{
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.5);
+            -moz-box-shadow: 0 1px 2px rgba(0,0,0,.5);
+            box-shadow: 0 1px 2px rgba(0,0,0,.5);
+            max-height: 0;
+            overflow: hidden;
+        }
+            /* estilos para los LI del menu */
+            #menu li{
+                background: #33363b;
+                border-bottom: 1px solid #282b30;
+                float: none;
+            }
+
+            /* Quitamos el borde del ultimo item del menú */
+            #menu li:last-child{ border-bottom: 0;}
+                #menu li a{
+                    padding: 15px 0;
+                    height: auto;
+                    line-height: normal;
+                }
+                #menu li a:hover{background:#2a2d33}
+
+        /* Agregamos una animación al despligue del menú */
+        #menu ul.open-menu{
+            max-height: 400px;
+            -webkit-transition: max-height .4s;
+            -moz-transition: max-height .4s;
+            -ms-transition: max-height .4s;
+            -o-transition: max-height .4s;
+            transition: max-height .4s;
+        }
+}
+
+

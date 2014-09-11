@@ -1,0 +1,191 @@
+
+
+#divContenedor{
+	width: 600px;
+	position: absolute;
+	left: 50%;
+	margin-left: -300px;
+	top: 100px;
+	text-align: center;
+}
+	#divLogo{
+		padding-bottom: 20px;
+	}
+
+/* estilos del overlay */
+#divOverlay{
+	position: fixed;
+	background: #000;
+	height: 100%;
+	width: 100%;
+	z-index: 99998;
+	display: none;
+	top: 0;
+	left: 0;
+}
+
+.clsBoton{
+	padding: 7px;
+	
+	display: inline-block;background-image:url(images/historial.png); background-repeat:no-repeat; width:112px; height:26px;
+
+
+	color: #fff;
+
+}
+	.clsBoton:hover{
+	
+		color: #000;
+
+	}
+	
+	.clsBoton1{
+	padding: 7px;
+	
+	display: inline-block;background-image:url(images/sesion.png); background-repeat:no-repeat; width:135px; height:26px;
+
+
+	color: #fff;
+
+}
+	.clsBoton1:hover{
+	
+		color: #000;
+
+	}
+	
+	.clsBoton2{
+	padding: 7px;
+	
+	display: inline-block;background-image:url(images/registrarse.png); background-repeat:no-repeat; width:126px; height:26px;
+
+
+	color: #fff;
+
+}
+	.clsBoton2:hover{
+	
+		color: #000;
+
+	}
+	
+	.clsBoton3{
+	padding: 7px;
+	
+	display: inline-block;background-image:url(images/contacto.png); background-repeat:no-repeat; width:117px; height:26px;
+
+
+	color: #fff;
+
+}
+	.clsBoton3:hover{
+	
+		color: #000;
+
+	}
+.clsVentanaCerrar {
+position: absolute;
+margin-left: -12px;
+width: 20px;
+height: 20px;
+background-image: url(cerrar.png) !important;
+background-repeat: no-repeat !important;
+top: 0px;
+
+}
+
+/* clases relacionadas con la ventana modal */
+.clsVentana{
+width: 300PX;
+height: 337PX;
+position: absolute;
+left: 37%;
+border-radius: 3px;
+z-index: 99999;
+display: none; background: url(images/mod.png); background-repeat:no-repeat;padding: 25px;
+}
+	.clsVentanaTitulo{
+	display: block;
+
+height: 37px;background: #eee;
+
+	}
+	
+
+	
+.bo {
+cursor: pointer;
+-moz-box-shadow: inset 0px 1px 0px 0px #ffffff;
+-webkit-box-shadow: inset 0px 1px 0px 0px #ffffff;
+box-shadow: inset 0px 1px 0px 0px #ffffff;
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf));
+background: -moz-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+background: -webkit-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+background: -o-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+background: -ms-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+background: linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf',GradientType=0);
+background-color: #ededed;
+-moz-border-radius: 3px;
+-webkit-border-radius: 3px;
+border-radius: 3px;
+border: 1px solid #dcdcdc;
+text-shadow: 0px 1px 0px #ffffff;
+display: inline-block;
+color: #999 !important;
+font-family: Arial, Helvetica, sans-serif;
+font-size: 12px;
+font-weight: lighter;
+padding: 4px 15px;
+text-decoration: none;
+position: absolute;
+
+z-index: 99999;margin-left: 162px;bottom: 26px;
+
+}	
+	
+	
+	
+		.clsVentanaTitulo strong{
+			display: inline-block;
+			padding: 10px;
+		}
+		.clsVentanaTitulo a{
+	float: right;
+display: inline-block;
+color: #fff;
+text-decoration: none;
+padding: 13px;
+margin: 2px;
+cursor: pointer;right: 0px;
+		}
+			.clsVentanaTitulo a:hover{
+				
+				color: #000;
+			}
+			
+.mod {
+font-size: 12px;
+font-family: arial;
+text-shadow: 0 1px 0 white;
+}			
+	table {
+border: 0px;
+border: none;
+border-spacing: 0px;
+border-color: transparent;
+}		
+			
+			
+	.clsVentanaContenido{
+	
+height: 284px;
+overflow: hidden;
+border-radius: 0 0 3px 3px;padding-top: 0px;
+	}
+		.clsVentanaContenido iframe{
+		width: 251px;
+height: 273px;
+border: 0px;
+
+		}

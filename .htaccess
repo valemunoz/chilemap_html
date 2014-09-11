@@ -1,0 +1,19 @@
+Options FollowSymLinks
+
+RewriteEngine On
+RewriteBase /chilemap_html/
+
+RewriteCond %{REQUEST_URI} !\.css$
+RewriteCond %{REQUEST_URI} !\.js$
+
+#RewriteRule ^/?$ index_mapa.php [L]
+RewriteRule ^([^/]*).htm$ index_mapa.php?q=$1		[L]
+
+
+#ERRORES
+ErrorDocument 404 http://localhost/chilemap_html/problemas.html 
+ErrorDocument 500 http://localhost/chilemap_html/problemas.html 
+ErrorDocument 400 http://localhost/chilemap_html/problemas.html 
+ErrorDocument 403 http://localhost/chilemap_html/problemas.html 
+ErrorDocument 503 http://localhost/chilemap_html/problemas.html 
+

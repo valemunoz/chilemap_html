@@ -1,0 +1,9 @@
+# robots.txt for el que lo quiera
+
+User-agent: *
+Disallow: /admin/ # aqui las carpetas que querais que nadie vea
+Disallow: /iconos/
+Disallow: /images/
+Disallow: /js/
+Disallow: /jsmenu/
+Disallow: /includes/
