@@ -258,7 +258,7 @@ if($_REQUEST['tipo']==1 and $_REQUEST['act']==1)//direcciones
 				$texto .="<div id=titulo3>".ucwords(utf8_encode(toponimos(strtolower($direc[4]))))."</div>";
 				//$texto=ucwords(utf8_encode($texto));
 				$texto .="<div id=botonera><img class=img_boton src=images/favorito.png title=Agregar a favoritos onclick=javascript:addFavorito(".$estado_ses.",".$id_pto.",1);><img class=img_boton src=images/mail.png title=Enviar por correo onclick=compartirPto(".$id_pto.",1);><img class=img_boton src=images/facebook.png title=Compartir en Facebook onclick=javascript:compartirFace(**".$CM_path_base2."?ptot=1&pto=".$id_pto."**);> <a href=**https://twitter.com/share?url=".$CM_path_base2."?ptot=1&pto=".$id_pto."&via=chilemap&text=Revisa este link** target=_BLANK><img  class=img_boton src=images/twitter.png title=Compartir en Twitter></a></div>";
-			
+			 $texto=str_replace("'","",$texto);
 				?>
 				<script>
 					CM_busqueda[CM_busqueda.length]="<?=$direc[7]?>,<?=$direc[8]?>";
