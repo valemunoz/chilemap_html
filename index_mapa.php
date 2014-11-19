@@ -1398,6 +1398,16 @@ var TabbedPanels1 = new Spry.Widget.TabbedPanels("TabbedPanels1");
  	</script>
  	<?php
  }
+  if(isset($_REQUEST['lat']) and isset($_REQUEST['lon']))
+ {
+ 	?>
+ 	<script>
+ 		//zoomExtendido(<?=$_REQUEST['left']?>,<?=$_REQUEST['bottom']?>,<?=$_REQUEST['right']?>,<?=$_REQUEST['top']?>);
+ 		addMarcador('<?=$CM_ICONO_SERV?>','35,35',<?=$_REQUEST['lat']?>,<?=$_REQUEST['lon']?>,"",'Ubicaci&oacute;n enviada');
+   	moverCentro(<?=$_REQUEST['lat']?>,<?=$_REQUEST['lon']?>,17);
+ 	</script>
+ 	<?php
+ }
  ?>
 
 
