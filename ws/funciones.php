@@ -45,7 +45,7 @@ function getDireccionExacta($direccion,$limite)
 		$direc[]=$rowCalle[7];
 		$direc[]=$rowCalle[8];  
 		 
-		$direc[]=1;
+		//$direc[]=1;
 		$direc[]=$rowCalle[9]; 
 		$direcciones[]=$direc;
 		
@@ -98,5 +98,148 @@ function getDireccionIlike($direccion,$limite)
 	pg_close($dbPg);
   return $direcciones;
 }
+function buscarDireccionOSM($query)
+{
+	
+	$delay = 0;
+	
+	$base_url="http://nominatim.openstreetmap.org/search?";
+  $geocode_pending = true;
+  while ($geocode_pending) {
+    //$address = "pasaje u 2113 chile";
+    $address=trim($direccion);
+    $request_url = $base_url . "q=".urldecode($query)."&format=xml&polygon=1&addressdetails=1";
+    $xml = simplexml_load_file($request_url) or die("url not loading");    
+    //print_r($xml);
+    //$status = $xml->status;
+    $geocode_pending=false;
+    //echo count($xml->place);
+    foreach($xml->place as $place)
+    {
+    	$place=$xml->place;
+    	if(strtolower($place->country)=="chile" and is_numeric(trim($place->house_number)))
+    	{
+    		$lonlat=Array();
+    		
+    		$lonlat[]=0;
+    		$lonlat[]=$place->road;
+    		$lonlat[]=0;
+    		$lonlat[]=$place->house_number;
+    		$lonlat[]=$place->city;
+    		//$lonlat[]=$place->country;
+    		$lonlat[]=$place->state;
+    		$lonlat[]=$place['lat'];
+    		$lonlat[]=$place['lon'];
+    		$lonlat[]="";
+    		$lonlat[]=2;    		
+    		
+    		$lonlat_arr[]=$lonlat;
+    	}
+    	//echo "<br>".$longitud;
+    	//print_r($xml_result);
+    }
+  }
+  return $lonlat_arr;
+}
 
+function getDireccionGoogle($direccion)
+{
+	
+	
+	$delay = 0;
+	//$base_url = "http://" . MAPS_HOST . "/maps/geo?output=xml" . "&key=" . KEY;
+	$base_url="http://maps.googleapis.com/maps/api/geocode/xml?";
+  $geocode_pending = true;
+  while ($geocode_pending) {
+    //$address = "pasaje u 2113 chile";
+    $address=trim($direccion);
+   $request_url = $base_url . "&address=" . urldecode($address)."+chile&oe=utf-8&sensor=false";
+    $xml = simplexml_load_file($request_url) or die("url not loading");    
+    //print_r($xml);
+    $status = $xml->status;
+    if (strcmp($status, "OK") == 0) {
+      // Successful geocode
+      $geocode_pending = false;
+      
+      $total_r=$xml->result;
+      
+      $len_place=$xml;
+      $i=1;
+      foreach($len_place->result as $len)
+      {
+      	$direc = $len->formatted_address;
+      	$tipo = $len->type;
+      	//echo "total:".count($len->address_component);
+      	for($i=0;$i<count($len->address_component);$i++)
+      	{
+      		$type=$len->address_component[$i]->type;
+      		$type2=$len->address_component[$i]->type[0];
+      		if(strtolower(trim($type))=="street_number")
+      		{
+      			$numero_municipal=$len->address_component[$i]->long_name;
+      		}elseif(strtolower(trim($type))=="route")
+      		{
+      			$calle=$len->address_component[$i]->long_name;
+      			$abrevia_calle=$len->address_component[$i]->short_name;
+      		}elseif(strtolower(trim($type2))=="locality")
+      		{
+      			$ciudad=$len->address_component[$i]->long_name;
+      			$abrevia_ciudad=$len->address_component[$i]->short_name;
+      		}elseif(strtolower(trim($type2))=="administrative_area_level_3")
+      		{
+      			$comuna=$len->address_component[$i]->long_name;
+      			$abrevia_comuna=$len->address_component[$i]->short_name;
+      		}elseif(strtolower(trim($type2))=="administrative_area_level_1")
+      		{
+      			$region=$len->address_component[$i]->long_name;
+      			$abrevia_region=$len->address_component[$i]->short_name;
+      		}elseif(strtolower(trim($type2))=="country")
+      		{
+      			$pais=$len->address_component[$i]->long_name;
+      			$abrevia_pais=$len->address_component[$i]->short_name;
+      		}
+      		
+      		
+      	}
+      	//geometrias
+      	$latitud=$len->geometry->location->lat;
+      	$longitud=$len->geometry->location->lng;
+      	$tipo_gis=$len->geometry->location_type;
+      	
+      	$dire=Array();
+				//$dire[]=$tipo;
+				//$dire[]=$direc;
+  		
+    		
+    		
+    		
+				$dire[]=0;
+				$dire[]=$calle;
+				$dire[]=0;
+				$dire[]=$numero_municipal;
+				$dire[]=$comuna;
+				$dire[]=$region;
+				$dire[]=$latitud;
+				$dire[]=$longitud;
+				$dire[]="";
+				$dire[]=3;
+				
+				
+				//$dire[]=$ciudad;
+				
+				
+				//$dire[]=$tipo_gis;
+				
+    		
+    		
+    		
+      	$direccion_arr[]=$dire;
+				$i++;
+    	}      
+    } 
+    usleep($delay);
+  }
+ 
+	return $direccion_arr;
+}
 ?>

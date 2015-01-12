@@ -407,17 +407,15 @@ Entrega direccionde desde lat y longitud
 */
 function getDireccionGoogleLATLON($lat,$lon)
 {
-	
-	
 	$delay = 0;
-	//$base_url = "http://" . MAPS_HOST . "/maps/geo?output=xml" . "&key=" . KEY;
+	
 	$base_url="http://maps.googleapis.com/maps/api/geocode/xml?";
   $geocode_pending = true;
   while ($geocode_pending) {
-    //$address = "pasaje u 2113 chile";
+    
     $address=trim($direccion);
     //$request_url = $base_url . "&address=" . urlencode($address)."+chile&oe=utf-8&sensor=false";
-    $request_url="latlng=40.714224,-73.961452&sensor=false";
+    $request_url=$base_url."latlng=".$lat.",".$lon."&sensor=false";
     $xml = simplexml_load_file($request_url) or die("url not loading");    
     //print_r($xml);
     $status = $xml->status;
@@ -473,7 +471,7 @@ function getDireccionGoogleLATLON($lat,$lon)
       	$dire=Array();
 				$dire[]=$tipo;
 				$dire[]=$direc;
-				echo $dire[]=$numero_municipal;
+				$dire[]=$numero_municipal;
 				$dire[]=$calle;
 				$dire[]=$comuna;
 				$dire[]=$ciudad;
@@ -481,7 +479,10 @@ function getDireccionGoogleLATLON($lat,$lon)
 				$dire[]=$latitud;
 				$dire[]=$longitud;
 				$dire[]=$tipo_gis;
-      	$direccion_arr[]=$dire;
+				if(strtolower($tipo)=="street_address")
+				{
+      		$direccion_arr[]=$dire;
+      	}
 				$i++;
     	}      
     } 
