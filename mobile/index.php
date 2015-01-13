@@ -34,7 +34,7 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
     	  	  			
     	  	  		<li id="ll_iniciar"><a href="#mod_sesion" data-rel="dialog" data-transition="pop" >Iniciar Sesion</a></li>	
     	  	  		<li id="ll_reg"><a href="#mod_registro" data-rel="dialog" data-transition="pop" >Registate!</a></li>	
-    	  	  		<li id="ll_cerrar"><a href="#mod_contacto" data-rel="dialog" data-transition="pop" >Contacto</a></li>	
+    	  	  		<li id="ll_contacto"><a href="#mod_contacto" data-rel="dialog" data-transition="pop" >Contacto</a></li>	
     	  	  		<li id="ll_cerrar"><a href="javascript:cerrarSesion();" data-rel="dialog" data-transition="pop" >Cerrar sesi&oacute;n</a></li>		
 			  	    </ul>				  	    	    	
 			  	  </div>
@@ -216,10 +216,10 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
 					<p id="form_login">
 						
 						
-						<input type="text" class=input_form name="nom" id="nom" value="" placeholder="Nombre">
-						<input type="text" class=input_form name="mail" id="mail" value="" placeholder="Mail">
-						<input type="text" class=input_form name="tel" id="tel" value="" placeholder="Telefono">
-						<textarea cols="40" rows="13" class=input_form name="descrip" id="descrip" placeholder="Mensaje"></textarea>
+						<input type="text" class=input_form name="nom_con" id="nom_con" value="" placeholder="Nombre">
+						<input type="text" class=input_form name="mail_con" id="mail_con" value="" placeholder="Mail">
+						<input type="text" class=input_form name="tel_con" id="tel_con" value="" placeholder="Telefono">
+						<textarea cols="40" rows="13" class=input_form name="descrip_con" id="descrip_con" placeholder="Mensaje"></textarea>
 						<div id="msg_error_contacto" class="msg_error"></div>						
 						<input type="button" onclick="senContacto();" value="Enviar">
 						
@@ -267,7 +267,7 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
 					{			
 					?>
 					  
-						ubicacionActual();
+						//ubicacionActual();
 						
 					
       	  <?php

@@ -21,7 +21,7 @@ var CM_path="http://www.chilemap.cl";
 var CM_path_completo="http://www.chilemap.cl/index_mapa.php";
 var CM_id_pto_share=""
 var CM_tipo_pto_share="";    
-	
+var CM_home="index.php";	
 var CM_logo="images/logo.png";
 var CM_logo2="images/logo2.png";
 var CM_caption='Tu lugar esta aqu&iacute;';
@@ -208,7 +208,7 @@ function cerrarSesion()
 				{tipo:8} 
 					,function(){	
 			
-  	window.location.href="index.html";
+  						window.location.href=""+CM_home+"";
 					
 			
 					}
@@ -316,15 +316,15 @@ function loadCategMapa(categ)
 
 function senContacto()
 {
-	var mail=$.trim(document.getElementById("mail").value);
-	var nom=$.trim(document.getElementById("nom").value);
-	var tel=$.trim(document.getElementById("tel").value);
-	var descrip=$.trim(document.getElementById("descrip").value);
+	var mail=$.trim(document.getElementById("mail_con").value);
+	var nom=$.trim(document.getElementById("nom_con").value);
+	var tel=$.trim(document.getElementById("tel_con").value);
+	var descrip=$.trim(document.getElementById("descrip_con").value);
 	
 	if(mail !="" && nom!="" && validarEmail(mail) && descrip!="")
 	{
 		$("#output").load(path_query, 
-				{tipo:13, mail:mail,nom:nom,tel:nom,descrip:descrip} 
+				{tipo:13, mail:mail,nom:nom,tel:tel,descrip:descrip} 
 					,function(){
 						$("#mod_contacto").dialog("close");	
 						setTimeout('mensaje("Mensaje Enviado.","myPopup");',500);

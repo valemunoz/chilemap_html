@@ -71,7 +71,7 @@ if($deviceType=="computer")
 }
 $data_server= explode("?",$_SERVER['HTTP_REFERER']);
 //echo "".strtolower($data_server[0])."==".$CM_path_base2." or ".strtolower($data_server[0])."==".$CM_path_base."";
-if(strtolower($data_server[0])==$CM_path_base2 or strtolower($data_server[0])==$CM_path_base or strtolower($data_server[0])=="http://".substr($CM_path_base,11))
+if(strtolower($data_server[0])==$CM_path_base2 or strtolower($data_server[0])==$CM_path_base or strtolower($data_server[0])=="http://".substr($CM_path_base,11) or strtolower($data_server[0])=="http://".substr($CM_path_base2,11))
 {
 	if($_REQUEST['tipo']==1)
 	{
@@ -258,6 +258,7 @@ if(strtolower($data_server[0])==$CM_path_base2 or strtolower($data_server[0])==$
 								$("#ll_iniciar").show();
 								$("#ll_reg").show();
 								$("#cont_favoritos").html("");
+								$("#ll_cerrar").hide();
 							</script>
 		<?php
 		
@@ -271,6 +272,7 @@ if(strtolower($data_server[0])==$CM_path_base2 or strtolower($data_server[0])==$
 				$("#text_supIz").html("Bienvenido <?=ucwords($_SESSION['nombre'])?>");
 				$("#ll_iniciar").hide();
 				$("#ll_reg").hide();
+				$("#ll_cerrar").show();
 				</Script>
 			<?php
 		}
@@ -541,15 +543,15 @@ if(strtolower($data_server[0])==$CM_path_base2 or strtolower($data_server[0])==$
 	}elseif($_REQUEST['tipo']==13)
 	{
 		$para=trim($_REQUEST['mail']);
-		$titulo="Gis, formulario de contacto";
+		$titulo="Formulario de contacto chilemap";
 		$msg="Hemos recibido su mensaje. Nos pondremos en contacto a la brevedad.<br><br> Equipo Chilemap";
 		sendMail($para,$msg,$titulo);
 		$msg2="Mensaje recibido desde formulario Gis version Movil.<br><br>";
-		$msg2.="<br>Nombre: ".$_REQUEST['nombre'];
+		$msg2.="<br>Nombre: ".$_REQUEST['nom'];
 		$msg2.="<br>Telefono: ".$_REQUEST['tel'];
 		$msg2.="<br>Mail: ".$_REQUEST['mail'];
 		$msg2.="<br>Mensaje: ".$_REQUEST['descrip'];
-		sendMail("contacto@solutionworks.cl,valeria@solutionworks.cl",$msg2,$titulo);
+		sendMail("contacto@chilemap.cl,valeria@chilemap.cl",$msg2,$titulo);
 	}elseif($_REQUEST['tipo']==14)//registra usuario
 	{
 	
