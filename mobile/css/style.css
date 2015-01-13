@@ -414,6 +414,7 @@ max-height:300px !important;
 {
 	font-size:9px !important;
 	color:#8E878F;
+	text-align:left;
 }
 #ll_iniciar
 {
@@ -426,4 +427,41 @@ max-height:300px !important;
 #ll_reg
 {
 	display:none;
+}
+#cont_pop
+{
+	text-align:left;
+}
+
+#botonera {
+
+-webkit-border-top-left-radius: 6px;
+-moz-border-radius-topleft: 6px;
+border-top-left-radius: 6px;
+-webkit-border-top-right-radius: 6px;
+-moz-border-radius-topright: 6px;
+border-top-right-radius: 6px;
+-webkit-border-bottom-right-radius: 6px;
+-moz-border-radius-bottomright: 6px;
+border-bottom-right-radius: 6px;
+-webkit-border-bottom-left-radius: 6px;
+-moz-border-radius-bottomleft: 6px;
+border-bottom-left-radius: 6px;
+text-indent: 0;
+border-bottom: 1px solid #fff !important; background:none; border-left:1px solid #E7E7E7 !important; border-right:1px solid #E7E7E7 !important;border-top: 1px solid #B3B3B3 !important;
+display: inline-block;
+width: 110px;margin-top: 7px;
+cursor:pointer;
+margin-left: 76px;
+margin-bottom: 0px;padding-top: 4px;
+padding-bottom: 4px;
+
+}
+.img_boton
+{
+	width: 18px;
+height: 18px;
+cursor: pointer;
+margin-left: 5px;
+	
 }

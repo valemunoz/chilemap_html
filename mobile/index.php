@@ -1,3 +1,8 @@
+<?php
+include("../includes/funciones.php");
+$estado_sesion=estado_sesion();
+$CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
+?>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -34,10 +39,13 @@
 			  	    </ul>				  	    	    	
 			  	  </div>
 			  	  
+			  	  <div id=cont_favoritos></div>
+			  	  <div id="serv_ptos"></div>
+			  	  
 				</div><!-- /panel -->
 					<div data-role="panel" id="mypanel2" data-theme="a" style="z-index:99999;" data-position="left" data-display="overlay">
     	  		<a href="#mypanel" data-iconpos="top" data-rel="close" data-icon="delete" data-role="button" data-iconpos="notext"></a>
-    			  <input type="text" id="qr" name="qr" placeholder="carmen 222 santiago / Banco" data-inline="true">
+    			  <input type="text" id="qr" name="qr" placeholder="Luis valdes 2557 puente alto / Banco" data-inline="true">
     			  
 
     			  <input type="button" value="Buscar" onclick="buscar();" data-inline="true">
@@ -85,7 +93,7 @@
     			<ul id="list_inf">
     				<li><a href="javascript:ubicacionActual();"><img src="img/current.png" width=32px height=32px></a></li>
     				
-    				<li><a href="javascript:checkServ(4,'img/banco.png',1000);"><img src="img/banco.png" width=32px height=32px></a></li>
+    				<li><a href="javascript:checkServ(32,'img/ico_banco.png',1000);"><img src="img/cajero.png" width=32px height=32px></a></li>
     				<li><a href="javascript:loadTS();"><img src="img/bus.png" width=32px height=32px></a></li>
     				<li><a href="#mypanel2"><img src="img/search.png" width=32px height=32px></a></li>
     				<li><a href="javascript:limpiarMapa();"><img src="img/clean.png" width=32px height=32px></a></li>
@@ -130,7 +138,40 @@
     	</div>
     	  
  		</div> 		
- 		
+<div data-role="page" id="m_mail" data-theme="a">
+
+   	<div data-role="header" >
+	   			 <img id=back_boton src="img/back.png" class="ui-btn-left" onclick="volver();">
+      		<h1><img src="img/logo_inicio.png" height=50% width=70%>     		 </h1>
+      		
+   		</div>    		
+   	  <div data-role="content" id="contenido" >
+   	  	
+    	  	<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
+					 Comparte!<div></div>
+					</div>
+					
+					<p>
+						<label for="text-basic">Tu Nombre</label>
+						<input type="text" name="nombre_mail" id="nombre_mail" value="">
+						<label for="text-basic">Nombre Destinatario</label>
+						<input type="text" name="nombre_dest" id="nombre_dest" value="">
+						
+						<label for="text-basic">E-mail Destinatario</label>
+						<input type="text" name="mail_mail" id="mail_mail" value="">
+						<label for="text-basic">Mensaje</label>
+						<textarea class="cla_txttarea" name="mensaje_mail" id="mensaje_mail" cols="10" rows="5"></textarea>
+
+						<!--a href="#" data-role="button" data-inline="true" data-theme="b" data-mini="true">Registrarse</a-->
+						<div id="msg_mail" class="msg_error"></div>
+						<input type="button" onclick="validaMail(CM_id_pto_share);" value="Enviar">
+					</p>    
+			
+    	    
+					
+    	</div>
+    	  
+ 		</div>  		
  		<div data-role="page" id="mod_registro" data-theme="a">
 
    	<div data-role="header" >
@@ -196,5 +237,138 @@
 
 
  			<div id=output></div>
+ 			<script>
+	window.fbAsyncInit = function() {
+    // init the FB JS SDK
+    FB.init({
+      appId      : '171716159685522',                        // App ID from the app dashboard
+      channelUrl : 'http://www.chilemap.cl', // Channel file for x-domain comms
+      status     : true,                                 // Check Facebook Login status
+      xfbml      : true,                                 // Look for social plugins on the page
+      req_perms : 'publish_stream'
+    });
+
+    // Additional initialization code such as adding Event Listeners goes here
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/es_ES/all.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+  
+  function loadInit()
+  {
+  	<?php
+  	if(!isset($_REQUEST['pto']) and !isset($_REQUEST['lat']))
+					{			
+					?>
+					  
+						ubicacionActual();
+						
+					
+      	  <?php
+      		}
+      		if(trim($_REQUEST['q'])!="")
+							{
+   							?>
+   								
+   								buscar('<?=$_REQUEST["q"]?>');
+   								
+   							
+   						<?php  
+						}
+						if(isset($_REQUEST['left']))
+ 						{
+ 								?>
+ 								  
+ 									zoomExtendido(<?=$_REQUEST['left']?>,<?=$_REQUEST['bottom']?>,<?=$_REQUEST['right']?>,<?=$_REQUEST['top']?>);
+ 									
+ 								
+ 								<?php
+ 							}
+ 						if(isset($_REQUEST['lat']) and isset($_REQUEST['lon']))
+ 				{
+ 					?>
+ 			  
+ 						addMarcadores(<?=$_REQUEST['lon']?>,<?=$_REQUEST['lat']?>,"Ubicaci&oacute;n enviada","img/marker.png",35,35);
+ 						
+ 				  	moverCentro(<?=$_REQUEST['lat']?>,<?=$_REQUEST['lon']?>,17);
+ 			  
+ 					<?php
+ 				}
+ 				if(isset($_REQUEST['pto']) and isset($_REQUEST['ptot']))
+							{
+								if($_REQUEST['ptot']==2)//servicio
+								{
+									$data_serv=getServicioXId(trim($_REQUEST['pto']));
+									//print_r($data_serv);
+									$titulo=ucwords(strtolower($data_serv[1]));
+								  $direccion="".ucwords($data_serv[5])." #".$data_serv[6]."";
+									$texto ="<div id=cont_pop><div class=titulo>".$titulo."</div>";
+												
+												$texto .="<div class=titulo_pop2>".$direccion."</div>";
+												$texto .="<div class=titulo_pop2>".ucwords($data_serv[7])."</div>";			
+												$texto .="<div class=botonera><img class=img_boton src=img/favorito.png title=Agregar a favoritos onclick=javascript:addFavorito(".$estado_sesion.",".$data_serv[0].",2);><img class=img_boton src=img/mail.png title=Enviar por correo onclick=compartirPto(".$data_serv[0].",2);><img class=img_boton src=img/facebook.png title=Compartir en Facebook onclick=javascript:compartirFace('".$CM_path_base2."&ptot=2&pto=".$data_serv[0]."');> <a href='https://twitter.com/share?url=".$CM_path_base2."?ptot=2&pto=".$data_serv[0]."&via=chilemap&text=Revisa este link' target=_BLANK><img  class=img_boton src=img/twitter.png title=Compartir en Twitter></a></div></div>";
+												
+										
+							   ?>
+							   
+							   	  
+							   	addMarcadores(<?=$data_serv[4]?>,<?=$data_serv[3]?>,"<?=$texto?>",'img/marker.png',35,35);   		
+							   	moverCentro(<?=$data_serv[3]?>,<?=$data_serv[4]?>,17);
+							   	
+							   <?php  
+							 }elseif($_REQUEST['ptot']==3)//servicio
+								{
+									$data_serv=getServicioPagoXId($_REQUEST['pto']);
+									$data_categoria=getServicioCategoria($data_serv[9]);
+									//print_r($data_serv);
+									$titulo=ucwords(strtolower($data_serv[1]));
+								  $direccion="".ucwords($data_serv[5])." #".$data_serv[6]."";
+									$texto ="<div id=cont_pop><div clase=titulo>".$titulo."</div>";
+												
+												$texto .="<div class=titulo_pop2>".$direccion."</div>";
+												$texto .="<div class=titulo_pop2>".ucwords($data_serv[7])."</div>";	
+												$texto .="<div class=titulo_pop_descrip>".ucwords(trim($data_serv[8]))."</div>";					
+												$texto .="<div class=botonera><img class=img_boton src=img/favorito.png title=Agregar a favoritos onclick=javascript:addFavorito(".$estado_sesion.",".$data_serv[0].",1);><img class=img_boton src=img/mail.png title=Enviar por correo onclick=compartirPto(".$data_serv[0].",1);><img class=img_boton src=img/facebook.png title=Compartir en Facebook onclick=javascript:compartirFace('".$CM_path_base2."&ptot=1&pto=".$data_serv[0]."');> <a href='https://twitter.com/share?url=".$CM_path_base2."?ptot=1&pto=".$data_serv[0]."&via=chilemap&text=Revisa este link' target=_BLANK><img  class=img_boton src=img/twitter.png title=Compartir en Twitter></a></div></div>";
+												
+										
+							   ?>
+							   
+							   	  
+							   	addMarcadores(<?=$data_serv[4]?>,<?=$data_serv[3]?>,"<?=$texto?>",'<?=$data_categoria[2]?>',35,35);   		
+							   	moverCentro(<?=$data_serv[3]?>,<?=$data_serv[4]?>,14);
+							   	
+							   <?php  
+							 }elseif($_REQUEST['ptot']==1)//direccion
+								{
+									$data_serv=getDireccionXId($_REQUEST['pto']);
+									
+								  $direccion="".ucwords($data_serv[5])." #".$data_serv[6]."";
+								  $titulo=$direccion;
+									//$texto ="<div id=titulo2>".$titulo."</div>";
+												
+												$texto ="<div id=cont_pop><div class=titulo>".$direccion."</div>";
+												$texto .="<div id=titulo_pop2>".ucwords($data_serv[7])."</div>";			
+												$texto .="<div id=botonera><img class=img_boton src=img/favorito.png title=Agregar a favoritos onclick=javascript:addFavorito(".$estado_sesion.",".$data_serv[0].",1);><img class=img_boton src=img/mail.png title=Enviar por correo onclick=compartirPto(".$data_serv[0].",1);><img class=img_boton src=img/facebook.png title=Compartir en Facebook onclick=javascript:compartirFace('".$CM_path_base2."&ptot=1&pto=".$data_serv[0]."');> <a href='https://twitter.com/share?url=".$CM_path_base2."?ptot=1&pto=".$data_serv[0]."&via=chilemap&text=Revisa este link' target=_BLANK><img  class=img_boton src=img/twitter.png title=Compartir en Twitter></a></div><div id=cont_pop>";
+												
+										
+							   ?>
+							     
+							   		addMarcadores(<?=$data_serv[4]?>,<?=$data_serv[3]?>,"<?=$texto?>",'img/marker.png',35,35);   		
+							   		moverCentro(<?=$data_serv[3]?>,<?=$data_serv[4]?>,17);
+							   	
+							   <?php  
+							 }
+							} 
+							?>	
+  }
+  
+	</script>
+
     </body>
 </html>

@@ -292,6 +292,7 @@ function moverCentro(CM_lat,CM_lon,CM_zoom)
 function checkServ(CM_id_servicio_gis,CM_icono,CM_id)
 {
 	
+	
 	if(getEstadoServicio(CM_id)==0)
 	{
 		desactivarServicio(CM_id);
@@ -322,6 +323,8 @@ function checkServ(CM_id_servicio_gis,CM_icono,CM_id)
 
 function checkServPago(CM_id_servicio_gis,CM_icono,CM_id)//AKA
 {
+		
+
 	
 	if(getEstadoServicioPagos(CM_id)==0)
 	{
@@ -332,6 +335,12 @@ function checkServPago(CM_id_servicio_gis,CM_icono,CM_id)//AKA
 		if(getEstadoServicioPagos(CM_id)==1)
 		{
 			activarServicioPagos(CM_id);
+			$.mobile.loading( 'show', {
+					text: 'Cargando...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
 			loadServEspPagos(CM_id_servicio_gis,CM_icono,CM_id);
 		}
 	}
@@ -339,7 +348,12 @@ function checkServPago(CM_id_servicio_gis,CM_icono,CM_id)//AKA
 }
 function loadServEsp(CM_id_servicio_gis,CM_icono,CM_id)
 {
-	
+	$.mobile.loading( 'show', {
+					text: 'Cargando...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
 	activarServicio(CM_id);
 	//deleteServicioMapa(CM_id);
 		
@@ -354,7 +368,7 @@ function loadServEsp(CM_id_servicio_gis,CM_icono,CM_id)
 	$("#output").load(path_query, 
 				{tipo:4,loni:AM_exten.left,lati:AM_exten.bottom,lond:AM_exten.right,lats:AM_exten.top,id:CM_id_servicio_gis,icono:CM_icono,id_serv:CM_id} 
 					,function(){	
-						
+						$.mobile.loading( 'hide');	
 										
 			
 					}
@@ -370,12 +384,22 @@ function loadServEspPagos(CM_id_servicio_gis,CM_icono,CM_id)
 		
 	var AM_exten = getExtencion();
 	
-	var body = document.getElementsByTagName("body")[0];
+	/*var body = document.getElementsByTagName("body")[0];
 	var scr = document.createElement("script");
 	scr.setAttribute("type","text/javascript");
-	scr.setAttribute("src","query_mapa.php?tipo=9&loni="+AM_exten.left+"&lati="+AM_exten.bottom+"&lond="+AM_exten.right+"&lats="+AM_exten.top+"&id="+CM_id_servicio_gis+"&icono="+CM_icono+"&id_serv="+CM_id+"");
+	scr.setAttribute("src",""+path_query+"?tipo=16&loni="+AM_exten.left+"&lati="+AM_exten.bottom+"&lond="+AM_exten.right+"&lats="+AM_exten.top+"&id="+CM_id_servicio_gis+"&icono="+CM_icono+"&id_serv="+CM_id+"");
 	scr.setAttribute("id","scriptTemporal");
-	body.appendChild(scr);
+	body.appendChild(scr);*/
+	$("#output").load(path_query, 
+				{tipo:16,loni:AM_exten.left,lati:AM_exten.bottom,lond:AM_exten.right,lats:AM_exten.top,id:CM_id_servicio_gis,icono:CM_icono,id_serv:CM_id} 
+					,function(){	
+						$.mobile.loading( 'hide');	
+										
+			
+					}
+			);
+	
+	
 	
 }
 function addServicios(CM_nombre,CM_id,CM_id_serv,CM_icono)
@@ -463,12 +487,20 @@ function getExtencion()
 
 function loadMovimiento()
 {
+	
 			for(i=0;i<CM_servicios_pago.length;i++)
 			{
 		
 				if(CM_servicios_pago_estado[i]==0)
 				{
 					deleteServicioMapaPagos(i);
+					$.mobile.loading( 'show', {
+					text: 'Cargando...',
+					textVisible: true,
+					theme: 'a',
+					html: ""
+				});
+			
 					loadServEspPagos(CM_servicios_pago[i],CM_servicios_pago_icono[i],i);
 				}
 			}
@@ -641,12 +673,15 @@ function deleteMarcadores()
 }
 /**/
 function replaceAll( text, busca, reemplaza ){
+	try
+	{
 
   while (text.toString().indexOf(busca) != -1)
 
       text = text.toString().replace(busca,reemplaza);
 
   return text;
+}catch(e){}
 
 }
 

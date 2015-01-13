@@ -1,7 +1,20 @@
 <?php
 include("../../includes/funciones.php");
+require_once("Mobile_Detect.php");
+$CM_path_base="http://localhost/chilemap_html/mobile/";
+$CM_path_base2="http://localhost/chilemap_html/mobile/index.php";
+$CM_path_web="http://www.chilemap.cl/index_mapa.php";
+//$CM_path_base="http://www.chilemap.cl/mobile/";
+//$CM_path_base2="http://www.chilemap.cl/mobile/index.php";
+
 $CM_ICONO_TRANSANTIAGO="img/bus2.png";
-$CM_ICONO_SERV="img/point2.png";
+$CM_ICONO_SERV="img/marker.png";
+$pagina_home="index.php";
+$CM_path_activa_mail="http://www.chilemap.cl/activa.php";
+$CM_PATH_REENVIO_CONF="http://www.chilemap.cl/confirmacion.php?mail=CM_MAIL";
+$CM_path_re_activa_mail="http://www.chilemap.cl/reactiva.php";
+$CM_ZOOM_DIR=15;
+
 /*MSG REGISTRO USUARIO*/
 $CM_USUARIO_REGISTRADO="Lo sentimos pero tu mail ya est&aacute; registrado.";
 $CM_USUARIO_ESPERA_ACTIVACION="Ya estas registrado!, estamos esperando que confirmes tu direcci&oacute;n de correo.<br><br>Quieres que te reenviemos el correo de confirmaci&oacute;n? <a href='".$CM_PATH_REENVIO_CONF."'>Haz click AQUI</a>.";
@@ -44,7 +57,21 @@ $CM_msg_direccion_no="<div class='msg_comun'>Lo sentimos, pero no encontramos re
 $CM_msg_servicio_no="<div class='msg_comun'>Lo sentimos, pero no encontramos resultados para puntos.</div>";
 $estado_sesion=estado_sesion();
 
-if(1==1)
+$detect = new Mobile_Detect;
+$deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
+$data_server= explode("?",$_SERVER['REQUEST_URI']);
+if($deviceType=="computer")
+{
+	?>
+		<script>
+			//window.location="<?=$CM_path_web?>?<?=$data_server[1]?>";
+	</script>
+	<?php
+	
+}
+$data_server= explode("?",$_SERVER['HTTP_REFERER']);
+//echo "".strtolower($data_server[0])."==".$CM_path_base2." or ".strtolower($data_server[0])."==".$CM_path_base."";
+if(strtolower($data_server[0])==$CM_path_base2 or strtolower($data_server[0])==$CM_path_base)
 {
 	if($_REQUEST['tipo']==1)
 	{
@@ -103,7 +130,8 @@ if(1==1)
 		{
 			 $texto .="<div class=titulo_pop_descrip>".ucwords($serv[10])."</div>";
 		}
-		$texto .="<div class=titulo_pop3>Distancia: ".round($serv[8],2)."</div>"; 
+		$texto .="<div class=titulo_pop3>Distancia: ".round($serv[8],2)."Km</div>";
+		$texto .="<div id=botonera><img class=img_boton src=img/favorito.png title=Agregar a favoritos onclick=javascript:addFavorito(".$estado_sesion.",".$serv[0].",3);><img class=img_boton src=img/mail.png title=Enviar por correo onclick=compartirPto(".$serv[0].",3);> <img class=img_boton src=img/facebook.png title=Compartir en Facebook onclick=compartirFace(".$serv[0].",1);><a href=https://twitter.com/share?url=".$CM_path_web."?ptot=1&pto=".$serv[0]."&via=chilemap&text=Revisa este link target=_BLANK><img  class=img_boton src=img/twitter.png title=Compartir en Twitter></a></div>"; 
 		$data_categoria=getServicioCategoria($serv[9]);
 		$icono=$data_categoria[2];
 			
@@ -133,8 +161,9 @@ if(1==1)
 		{
 			$texto .="<div class=titulo_pop_descrip>".ucwords($serv[10])."</div>";
 		}
-		$texto .="<div class=titulo_pop3>Distancia: ".round($serv[8],2)."</div>"; 
-		$icono='img/point2.png';
+		$texto .="<div class=titulo_pop3>Distancia: ".round($serv[8],2)."Km</div>"; 
+		$texto .="<div id=botonera><img class=img_boton src=img/favorito.png title=Agregar a favoritos onclick=javascript:addFavorito(".$estado_sesion.",".$serv[0].",2);><img class=img_boton src=img/mail.png title=Enviar por correo onclick=compartirPto(".$serv[0].",2);> <img class=img_boton src=img/facebook.png title=Compartir en Facebook onclick=compartirFace(".$serv[0].",1);><a href=https://twitter.com/share?url=".$CM_path_web."?ptot=1&pto=".$serv[0]."&via=chilemap&text=Revisa este link target=_BLANK><img  class=img_boton src=img/twitter.png title=Compartir en Twitter></a></div>"; 
+		$icono='img/marker.png';
 		?>
 		
 		
@@ -164,7 +193,7 @@ if(1==1)
 			$texto .="<div class=titulo_pop_descrip>".ucwords($dat[11])."</div>";
 		}
 		$texto .="<div class=titulo_pop3>".ucwords($dat[5])."</div>"; 
-		
+		//$texto .="<div id=botonera><img class=img_boton src=img/favorito.png title=Agregar a favoritos onclick=javascript:addFavorito(".$estado_sesion.",".$dat[0].",3);><img class=img_boton src=img/mail.png title=Enviar por correo onclick=compartirPto(".$dat[0].",3);> <img class=img_boton src=img/facebook.png title=Compartir en Facebook onclick=compartirFace(".$dat[0].");><a href=https://twitter.com/share?url=".$CM_path_web."?ptot=1&pto=".$dat[0]."&via=chilemap&text=Revisa este link target=_BLANK><img  class=img_boton src=img/twitter.png title=Compartir en Twitter></a></div>"; 
 			
 	
 		?>
@@ -228,6 +257,7 @@ if(1==1)
 								//cerrarSesion();
 								$("#ll_iniciar").show();
 								$("#ll_reg").show();
+								$("#cont_favoritos").html("");
 							</script>
 		<?php
 		
@@ -237,39 +267,17 @@ if(1==1)
 			?>
 			<script>
 				loadCategorias();
+				loadFavoritos();
 				$("#text_supIz").html("Bienvenido <?=ucwords($_SESSION['nombre'])?>");
 				$("#ll_iniciar").hide();
 				$("#ll_reg").hide();
 				</Script>
 			<?php
 		}
-		$servicios=CM_getServiciosActivos();
-			foreach($servicios as $i => $serv)
-    	{
-    		?>
-    		<script>
-    				//addServicios('<?=$serv[1]?>','<?=$i+1?>','<?=$serv[2]?>','<?=$serv[5]?>');
-    				//bar2 +='<li><a href="#mypanel2"><img src="img/banco.png" width=32px height=32px></a></li>';
-    		</script>
-    		<?php	
-    	}
-		?>
-		  				
-    				
-		   <script>
-		   	/*$(".ui-page-active .maintenance_tabs").empty();
-				var bar='<div data-role="navbar" id=list_nav class="maintenance_tabs">';
-				bar +='<ul id="myNavbar">';
-				bar +='<li><a href="javascript:ubicacionActual();"><img src="img/current.png" width=32px height=32px></a></li>';
-				bar +=bar2;
-				bar +='<li><a href="#mypanel2"><img src="img/search.png" width=32px height=32px></a></li>';
-				bar +='<li><a href="javascript:limpiarMapa();"><img src="img/clean.png" width=32px height=32px></a></li>';
-				bar +='</ul>';
-				bar +='</div>';
-				
-  			$(".ui-page-active .maintenance_tabs").append(bar).trigger('create');*/
-		   	</script> 		
-		<?php
+
+
+					
+		
 	}elseif($_REQUEST['tipo']==7)//inicio sesion
 	{
 			$usuario=getUsuario($_REQUEST['mail'],10);
@@ -281,7 +289,7 @@ if(1==1)
 			?>
 			<script>
 			//closeModalInicio();
-			window.location.href="index.html";
+			window.location.href="<?=$pagina_home?>";
 			</script>
 			<?PHP
 			
@@ -357,7 +365,8 @@ if(1==1)
 			$com=array();
 			$lon=array();
 			$lat=Array();
-			
+			$tip=array();
+			$direc=array();
 			$data=getDireccionExacta(urldecode($query),10);
 			if(count($data)>0)
 			{
@@ -368,7 +377,8 @@ if(1==1)
 					$com[]=$dat[4];
 					$lat[]=$dat[6];
 					$lon[]=$dat[7];
-					
+					$tip[]=$dat[9];
+					$direc[]=$dat[0];
 				}
 			
 			}else
@@ -383,7 +393,19 @@ if(1==1)
 						$com[]=$dat[4];
 						$lat[]=$dat[1];
 						$lon[]=$dat[0];
-						
+						$tip[]=3;
+						$dir=array();
+						$dir[]=$dat[3];
+						$dir[]=$dat[2];
+						$dir[]=$dat[4];
+						$dir[]=$dat[6];//region
+						$dir[]=$dat[7];//lat
+						$dir[]=$dat[8];//lon
+						$dir[]=ucwords("".$dat[3]." ".$dat[2]." ".$dat[4]." ".$dat[6]." ");//completa
+						addDireccion($dir,3);
+						$id_pto=getIdDireccionXLatLon($dat[7],$dat[8]);
+						$direc[]=$id_pto;
+				
 					}
 					
 				}else
@@ -398,7 +420,18 @@ if(1==1)
 							$com[]=$dat[4];
 							$lat[]=$dat[7];
 							$lon[]=$dat[8];
-							
+							$tip[]=2;
+							$dir=array();
+						$dir[]=$dat[3];
+						$dir[]=$dat[2];
+						$dir[]=$dat[4];
+						$dir[]=$dat[6];//region
+						$dir[]=$dat[7];//lat
+						$dir[]=$dat[8];//lon
+						$dir[]=ucwords("".$dat[3]." ".$dat[2]." ".$dat[4]." ".$dat[6]." ");//completa
+						addDireccion($dir,3);
+						$id_pto=getIdDireccionXLatLon($dat[7],$dat[8]);
+						$direc[]=$id_pto;
 						}
 					}else
 					{
@@ -419,7 +452,17 @@ if(1==1)
 					$dir=ucwords($cal)." #".$num[$i].", ".ucwords($com[$i]);
 					$texto="<div class=titulo>Direcci&oacute;n</div>";
 					$texto .="<div class=titulo_pop>".ucwords($cal)." ".$num[$i].", ".ucwords($com[$i])."</div>";
+					if($tip[$i]==2 or $tip[$i]==3)
+					{
+						if($tip[$i]==2)
+							$text_dir="GOOGLE";
+						else	
+							$text_dir="OSM";
+						$texto .="<span class=span_nota>Direcci&oacute;n no exacta obtenida desde ".$text_dir."</span>";
 					
+					}
+					//$texto .="<div id=botonera><img class=img_boton src=images/favorito.png title=Agregar a favoritos onclick=javascript:addFavorito(".$estado_ses.",".$direc[0].",1);><img class=img_boton src=images/mail.png title=Enviar por correo onclick=compartirPto(".$direc[0].",1);><img class=img_boton src=images/facebook.png title=Compartir en Facebook onclick=javascript:compartirFace('".$CM_path_web."?ptot=1&pto=".$direc[0]."');><a href='https://twitter.com/share?url=".$CM_path_web."?ptot=1&pto=".$direc[0]."&via=chilemap&text=Revisa este link' target=_BLANK><img  class=img_boton src=images/twitter.png title=Compartir en Twitter></a></div>";
+					$texto .="<div id=botonera><img class=img_boton src=img/favorito.png title=Agregar a favoritos onclick=javascript:addFavorito(".$estado_sesion.",".$direc[$i].",1);><img class=img_boton src=img/mail.png title=Enviar por correo onclick=compartirPto(".$direc[$i].",1);> <img class=img_boton src=img/facebook.png title=Compartir en Facebook onclick=compartirFace(".$direc[$i].",1);><a href=https://twitter.com/share?url=".$CM_path_web."?ptot=1&pto=".$direc[$i]."&via=chilemap&text=Revisa este link target=_BLANK><img  class=img_boton src=img/twitter.png title=Compartir en Twitter></a></div>";
 					?>
 					
 					<li><a  href="javascript:verMapa('<?=$texto?>',<?=$lon[$i]?>,<?=$lat[$i]?>,'img/direc.png');"><span class=mini_txt><?=$dir?></span></a>			
@@ -553,6 +596,218 @@ if(1==1)
 	
 	
 
+}elseif($_REQUEST['tipo']==15)
+{
+	$servicios=CM_getServiciosActivos();
+	$cat_pagos=getCatPagos();
+						foreach($servicios as $i => $serv)
+    						{
+    							?>
+    							<script>
+    									addServicios('<?=$serv[1]?>','<?=$i+1?>','<?=$serv[2]?>','<?=$serv[5]?>');
+    									</script>
+    							
+    							<?php	
+    						}
+    						if(count($cat_pagos)>0)
+    						{
+    						foreach($cat_pagos as $i => $serv)
+    						{
+    							?>
+    							<script>
+    									addServiciosPagos('<?=$serv[2]?>','<?=$i?>','<?=$serv[1]?>','<?=$serv[4]?>');
+    									</script>
+    							
+    							<?php	
+    						}
+    					}   
+	?>
+	<div data-role="collapsible" data-collapsed="false" id="nav_serv" data-theme="b">
+			  	  	
+						
+	<h3>Servicios</h3>
+			  	  <div data-role="navbar">
+    				<ul>
+        			<?php
+        			foreach($cat_pagos as $i => $serv)
+    								{
+    									?>
+    									<li onclick="$('#mypanel').panel('close');">
+    										<a href="javascript:checkServPago(<?=$serv[1]?>,'<?=$serv[4]?>',<?=$i?>);">
+    											<img width=23px height=23px src="<?=$serv[4]?>">
+    										</a>
+    									</li>
+    									<?php	
+    								}   
+        			foreach($servicios as $i => $serv)
+        			{
+        				if(trim($serv[5])!="")
+    								{
+    								?>
+    								<li onclick="$('#mypanel').panel('close');">
+    									<a href="javascript:checkServ(<?=$serv[2]?>,'<?=$serv[5]?>',<?=$i+1?>);">
+    										<img width=23px height=23px src="<?=$serv[5]?>">
+    									</a>
+    								</li>
+    								<?php	
+    								}
+        			}
+        			
+        			?>
+    				</ul>
+					</div><!-- /navbar -->
+					
+			  	  	
+						</div>
+	<?php
+}elseif($_REQUEST['tipo']==16)//servicios especificos pagos
+{
+	$datos=getServicioExtendPagos($_REQUEST['id'],$_REQUEST['lati'],$_REQUEST['lats'],$_REQUEST['lond'],$_REQUEST['loni']);
+	if(count($datos)>0)
+	{
+		$html="";
+		foreach($datos as $i => $dat)
+		{
+			
+			$texto_html ="<div id=cont_pop><div class=titulo>".strtoupper($dat[10])."</div>";
+			$texto_html .="<div class=titulo_pop2>".ucwords($dat[9])."</div>";
+			if(trim($dat[3])!="")
+			{
+				$texto_html .="<div class=titulo_pop2>".ucwords($dat[3])." #".$dat[4]."</div>";
+			}
+			$texto_html .="<div class=titulo_pop3>".ucwords($dat[5])."</div>";			
+			$texto_html .="<div class=titulo_pop_descrip>".ucwords(trim($dat[11]))."</div></div>";
+			
+			$html .="<li onclick=javascript:moverCentro(".$dat[1].",".$dat[2].",".$CM_ZOOM_DIR.");><img class='ui-li-icon ui-corner-none' src=".$dat[12].">".strtoupper($dat[10])."</li>";
+		?>
+		
+			
+			<script>
+			addMarcadoresOndemandPagos(<?=$dat[2]?>,<?=$dat[1]?>,"<?=$texto_html?>",'<?=$dat[12]?>',30,30,<?=$_REQUEST['id_serv']?>);
+			</Script>
+		
+		<?PHP
+	
+		}
+		?>
+		<script>
+		var tot_a=$("#cont-otros").html();
+		tot_a=replaceAll(tot_a,'(','');
+		tot_a=replaceAll(tot_a,')','');
+		tot_b=parseInt("<?=count($datos)?>");
+		total=0;
+		if($.isNumeric(tot_a))
+		{
+				total=parseInt(tot_a);
+		}
+		total=total+tot_b;
+		$("#cont-otros").html("("+total+")");
+		$("#cont-total").html("("+total+")");
+		$("#resul_otros2").html("<?=$html?>");
+		$('#resul_otros2').listview('refresh');
+		</script>
+		<?php
+	}
+	
+}elseif($_REQUEST['tipo']==17)
+{
+		session_start();
+												
+	?>
+	<div data-role="collapsible-set" data-inset="true" id="colap_fav">
+    											<div data-role="collapsible" >
+        										<h3>Favoritos <span id="cont-fav"></span></h3>
+														<ul data-role="listview" data-filter="true" data-scroll="true" data-filter-placeholder="Busca favoritos..." data-inset="true" id="resul_fav">	
+															<?php
+																		$datos=getFavoritoXUsuario($_SESSION['id_usuario']);
+															foreach($datos as $dat)
+															{
+																if($dat[2]==1)
+																{
+																 $dat_pto=getDireccionXId($dat[3]);
+																  $titulo2="DIRECCION";
+																  $icono=$CM_ICONO_DIR;
+																  
+																   $titulo=ucwords(utf8_encode(toponimos(strtolower($dat_pto[5]))))." #".$dat_pto[6];
+																}
+																elseif($dat[2]==2)  
+																{
+																	$dat_pto=getServicioXId($dat[3]);
+																	$titulo=ucwords(utf8_encode($dat[4]));  
+																	$titulo2=ucwords(utf8_encode($dat[4]));  
+																	$icono=$CM_ICONO_SERV;
+																	
+																}
+																elseif($dat[2]==3)  
+			  												{
+			  													
+			  													$dat_pto=getServicioPagoXId($dat[3]);
+																	$titulo=ucwords(utf8_encode($dat_pto[1]));  
+																	$titulo2=ucwords(utf8_encode($dat_pto[1]));  
+																	$icono=$CM_ICONO_SERV;
+																	
+			  												}  
+																$texto="<div id=cont_pop><div class=titulo>".$titulo2."</div>";
+																$texto .="<div class=titulo_pop>".ucwords(utf8_encode(toponimos(strtolower($dat_pto[5]))))." #".$dat_pto[6]."</div>";
+																$texto .="<div class=titulo_pop>".ucwords(utf8_encode(toponimos(strtolower($dat_pto[7]))))."</div>";
+																$texto=ucwords(utf8_encode($texto))."</div>";
+																?>
+																<li > 
+																<img class="ui-li-icon ui-corner-none" src="img/basura.png" onclick="javascript:deleteFavoritos(<?=$dat[0]?>);"><div onclick='javascript:addMarcadores("<?=$dat[6]?>","<?=$dat[5]?>","<?=$texto?>","<?=$icono?>",35,35);moverCentro("<?=$dat[5]?>","<?=$dat[6]?>","<?=$CM_ZOOM_DIR?>");'><?=$titulo?></div>
+																</li>
+																	<?php
+															}
+															?>
+			  	    							</ul>			    	
+						    					</div>
+	<?php
+}elseif($_REQUEST['tipo']==18)
+{
+	eliminarFav($_REQUEST['id_fav']);
+}elseif($_REQUEST['tipo']==19) //add favoritos
+{
+		
+		session_start();
+		$datos=getFavorito($_REQUEST['id'],$_REQUEST['tipo_data'],$_SESSION['id_usuario']);
+		//print_r($datos);
+		if(count($datos)==0)
+		{
+			$data[]=$_REQUEST['tipo_data'];
+			$data[]=$_REQUEST['id'];
+			addFavoritos($data);
+			
+		}else
+		{
+			
+		}
+		
+		
+}elseif($_REQUEST['tipo']==20) //envia mail modal
+{
+	//$msg="".$_REQUEST['nombre']." ha compartido un link contigo. <br><br> Haz click en este link para verlo <a href='".$_REQUEST['link']."'>Link chilemap.cl</a>";
+		$msg=str_replace("_NOMBRE_",$_REQUEST['nombre'],$CM_mail);
+	$msg=str_replace("_LINK_",$_REQUEST['link'],$msg);
+
+	$envio=sendMail($_REQUEST['mail'],$msg,"".$_REQUEST['nombre'].", compartio un link contigo.");
+	if($envio)
+	{
+		$msg="Link enviado.";
+		?>
+	  <script>
+		var capaContenedora = document.getElementById("msg_mail");
+	 	capaContenedora.innerHTML="<?=$msg?>";
+	 	</script>
+  <?php 
+	}else
+	{
+		$msg="No se pudo enviar link.";
+		?>
+	<script>
+		var capaContenedora = document.getElementById("msg_mail");
+	 	capaContenedora.innerHTML="<?=$msg?>";
+	 	</script>
+  <?php 
+	}
 }
 }
 ?>
