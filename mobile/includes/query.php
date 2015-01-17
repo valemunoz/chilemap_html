@@ -9,6 +9,7 @@ $CM_path_web="http://www.chilemap.cl/index_mapa.php";
 
 $CM_ICONO_TRANSANTIAGO="img/bus2.png";
 $CM_ICONO_SERV="img/marker.png";
+$CM_ICONO_DIR="img/direc.png";
 $pagina_home="index.php";
 $CM_path_activa_mail="http://www.chilemap.cl/activa.php";
 $CM_PATH_REENVIO_CONF="http://www.chilemap.cl/confirmacion.php?mail=CM_MAIL";
@@ -748,13 +749,14 @@ if(strtolower($data_server[0])==$CM_path_base2 or strtolower($data_server[0])==$
 																	$titulo2=ucwords(utf8_encode($dat_pto[1]));  
 																	$icono=$CM_ICONO_SERV;
 																	
+																	
 			  												}  
 																$texto="<div id=cont_pop><div class=titulo>".$titulo2."</div>";
 																$texto .="<div class=titulo_pop>".ucwords(utf8_encode(toponimos(strtolower($dat_pto[5]))))." #".$dat_pto[6]."</div>";
 																$texto .="<div class=titulo_pop>".ucwords(utf8_encode(toponimos(strtolower($dat_pto[7]))))."</div>";
 																$texto=ucwords(utf8_encode($texto))."</div>";
 																?>
-																<li > 
+																<li onclick="$('#mypanel').panel('close');"> 
 																<img class="ui-li-icon ui-corner-none" src="img/basura.png" onclick="javascript:deleteFavoritos(<?=$dat[0]?>);"><div onclick='javascript:addMarcadores("<?=$dat[6]?>","<?=$dat[5]?>","<?=$texto?>","<?=$icono?>",35,35);moverCentro("<?=$dat[5]?>","<?=$dat[6]?>","<?=$CM_ZOOM_DIR?>");'><?=$titulo?></div>
 																</li>
 																	<?php
@@ -809,6 +811,35 @@ if(strtolower($data_server[0])==$CM_path_base2 or strtolower($data_server[0])==$
 	 	capaContenedora.innerHTML="<?=$msg?>";
 	 	</script>
   <?php 
+	}
+}elseif($_REQUEST['tipo']==21)
+{
+	
+	//$("#msg_error_rec").html("El formato del mail es incorrecto");
+	$usuario=getUsuario($_REQUEST['mail'],0);
+	if(count($usuario)>0)
+	{
+		$para=trim($_REQUEST['mail']);
+		$titulo="Solciitud de Clave Chilemap";
+		$msg="Haz solicitado desde el sitio web la recuperacion de tu clave de ingreso";
+		$msg .="<br> La clave de ingreso es:".$usuario[5];
+		sendMail($para,$msg,$titulo);
+		
+		?>
+		<script>
+			
+			$("#mod_recupera").dialog("close");
+			setTimeout('$("#mod_sesion").dialog("close");',200);
+			setTimeout('mensaje("Datos enviados a la direcci&oacute;n de correo electr&oacute;nico","myPopup");',600);
+			</Script>
+		<?php
+	}else
+	{
+		?>
+		<script>
+		$("#msg_error_rec").html("Usuario no registrado");	
+			</Script>
+		<?php
 	}
 }
 }

@@ -532,3 +532,25 @@ function compartirFace(CM_link,tipo)
 }
 
 
+function loadRecupera()
+{
+			
+	var mail=document.getElementById("mail_rec").value;
+		$("#msg_error_rec").html("");
+	if(!validarEmail(mail))
+	{
+		$("#msg_error_rec").html("El formato del mail es incorrecto");
+	}else
+		{
+			$("#msg_error_rec").load("includes/query.php", 
+			{tipo:21, mail:mail} 
+				,function(){	
+					//$("#mod_sesion").dialog("close");
+					//$("#mod_recupera").dialog("close");	
+					
+					
+					
+				}
+		);		
+		}
+}

@@ -373,12 +373,12 @@
 #text_sup
 {
 	
-	font-size:75%;
+	font-size:60%;
 	font-weight:normal !important;
 }
 #text_supIz
 {
-	font-size:75%;
+	font-size:60%;
 	float:left;
 	font-weight:normal !important;
 }
@@ -450,7 +450,7 @@ border-bottom-left-radius: 6px;
 text-indent: 0;
 border-bottom: 1px solid #fff !important; background:none; border-left:1px solid #E7E7E7 !important; border-right:1px solid #E7E7E7 !important;border-top: 1px solid #B3B3B3 !important;
 display: inline-block;
-width: 110px;margin-top: 7px;
+width: 180px;margin-top: 7px;
 cursor:pointer;
 margin-left: 76px;
 margin-bottom: 0px;padding-top: 4px;
@@ -459,8 +459,8 @@ padding-bottom: 4px;
 }
 .img_boton
 {
-	width: 18px;
-height: 18px;
+width: 30px;
+height: 30px;
 cursor: pointer;
 margin-left: 5px;
 	

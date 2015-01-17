@@ -33,7 +33,7 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
 							<ul data-role="listview" data-inset="false">
     	  	  			
     	  	  		<li id="ll_iniciar"><a href="#mod_sesion" data-rel="dialog" data-transition="pop" >Iniciar Sesion</a></li>	
-    	  	  		<li id="ll_reg"><a href="#mod_registro" data-rel="dialog" data-transition="pop" >Registate!</a></li>	
+    	  	  		<li id="ll_reg"><a href="#mod_registro" data-rel="dialog" data-transition="pop" >Registrate!</a></li>	
     	  	  		<li id="ll_contacto"><a href="#mod_contacto" data-rel="dialog" data-transition="pop" >Contacto</a></li>	
     	  	  		<li id="ll_cerrar"><a href="javascript:cerrarSesion();" data-rel="dialog" data-transition="pop" >Cerrar sesi&oacute;n</a></li>		
 			  	    </ul>				  	    	    	
@@ -65,7 +65,7 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
 				</div><!-- /panel -->
    		<div data-role="header" >   			 
    			<a href="#mypanel2" data-icon="search" data-role="button" data-iconpos="notext"   class="ui-btn-left">+</a>
-      		<h1><img src="img/logo_inicio.png" height=15%>  </h1>       		 		 
+      		<h1><img src="img/logo_inicio.png" height=12%>  </h1>       		 		 
       	
       		<a href="#mypanel" data-icon="bars" data-role="button" data-iconpos="notext"  id="bot_conf" class="ui-btn-right">+</a>
    		</div>    		
@@ -109,7 +109,7 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
 
    	<div data-role="header" >
 	   			 <img id=back_boton src="img/back.png" class="ui-btn-left" onclick="volver();">
-      		<h1><img src="img/logo_inicio.png" height=50% width=70%>     		 </h1>
+      		<h1><img src="img/logo_inicio.png" width=70%>     		 </h1>
       		
    		</div>    		
    	  <div data-role="content" id="contenido" >
@@ -127,6 +127,9 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
 						<input type="password" class=input_form name="clave" id="clave"  autocomplete="off" placeholder="Contrase&ntilde;a">						
 						<div id="msg_error_reg" class="msg_error"></div>						
 						<input type="button" onclick="loadInicio();" value="Iniciar">
+						<p>
+							<a href="#mod_recupera" data-rel="dialog" data-transition="pop" ><input type="button" value="Olvido Contrase&ntilde;a?"></a>
+						</p>
 						
 					
 						<!--input type="button" onclick="cambiar('mod_registro');" value="Registrarme"-->
@@ -138,11 +141,42 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
     	</div>
     	  
  		</div> 		
+ 		
+<div data-role="page" id="mod_recupera" data-theme="a">
+
+   	<div data-role="header" >
+	   			 <img id=back_boton src="img/back.png" class="ui-btn-left" onclick="volver();">
+      		<h1><img src="img/logo_inicio.png" width=70%>     		 </h1>
+      		
+   		</div>    		
+   	  <div data-role="content" id="contenido" >
+   	  	
+    	  	<div class="ui-bar ui-bar-a" id=barra_sup style="text-align:center;">
+					 Recupera Contrase&ntilde;a<div></div>
+					</div>
+					
+					<p id="form_login">
+						
+						
+						<input type="text" class=input_form name="mail_rec" id="mail_rec" value="" placeholder="Usuario">
+						<div id="msg_error_rec" class="msg_error"></div>						
+						<input type="button" onclick="loadRecupera();" value="Recuperar">
+						
+					
+						<!--input type="button" onclick="cambiar('mod_registro');" value="Registrarme"-->
+					
+					</p>          
+			
+    	    
+					
+    	</div>
+    	  
+ 		</div>  		
 <div data-role="page" id="m_mail" data-theme="a">
 
    	<div data-role="header" >
 	   			 <img id=back_boton src="img/back.png" class="ui-btn-left" onclick="volver();">
-      		<h1><img src="img/logo_inicio.png" height=50% width=70%>     		 </h1>
+      		<h1><img src="img/logo_inicio.png" width=70%>     		 </h1>
       		
    		</div>    		
    	  <div data-role="content" id="contenido" >
@@ -152,15 +186,14 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
 					</div>
 					
 					<p>
-						<label for="text-basic">Tu Nombre</label>
-						<input type="text" name="nombre_mail" id="nombre_mail" value="">
-						<label for="text-basic">Nombre Destinatario</label>
-						<input type="text" name="nombre_dest" id="nombre_dest" value="">
+						<input type="text" name="nombre_mail" id="nombre_mail" value="" class=input_form placeholder="Nombre">
 						
-						<label for="text-basic">E-mail Destinatario</label>
-						<input type="text" name="mail_mail" id="mail_mail" value="">
-						<label for="text-basic">Mensaje</label>
-						<textarea class="cla_txttarea" name="mensaje_mail" id="mensaje_mail" cols="10" rows="5"></textarea>
+						<input type="text" name="nombre_dest" id="nombre_dest" value="" class=input_form placeholder="Nombre Destinatario">
+						
+						
+						<input type="text" name="mail_mail" id="mail_mail" value="" class=input_form placeholder="Mail Destinatario">
+						
+						<textarea class="cla_txttarea" name="mensaje_mail" id="mensaje_mail" cols="10" rows="5" class=input_form placeholder="MEnsaje"></textarea>
 
 						<!--a href="#" data-role="button" data-inline="true" data-theme="b" data-mini="true">Registrarse</a-->
 						<div id="msg_mail" class="msg_error"></div>
@@ -176,7 +209,7 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
 
    	<div data-role="header" >
 	   			 <img id=back_boton src="img/back.png" class="ui-btn-left" onclick="volver();">
-      		<h1><img src="img/logo_inicio.png" height=50% width=70%>     		 </h1>
+      		<h1><img src="img/logo_inicio.png" width=70%>     		 </h1>
       		
    		</div>    		
 			<div data-role="content" data-theme="a" id="cont_registro">
@@ -204,7 +237,7 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
 
    	<div data-role="header" >
 	   			 <img id=back_boton src="img/back.png" class="ui-btn-left" onclick="volver();">
-      		<h1><img src="img/gis2.png" width=85%>     		 </h1>
+      	<h1><img src="img/logo_inicio.png" width=70%>     		 </h1>
       		
    		</div>    		
    	  <div data-role="content" id="contenido" >
