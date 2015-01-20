@@ -132,6 +132,7 @@ if(strtolower($data_server[0])==$CM_path_base2 or strtolower($data_server[0])==$
 			 $texto .="<div class=titulo_pop_descrip>".ucwords($serv[10])."</div>";
 		}
 		$texto .="<div class=titulo_pop3>Distancia: ".round($serv[8],2)."Km</div>";
+		
 		$texto .="<div id=botonera><img class=img_boton src=img/favorito.png title=Agregar a favoritos onclick=javascript:addFavorito(".$estado_sesion.",".$serv[0].",3);><img class=img_boton src=img/mail.png title=Enviar por correo onclick=compartirPto(".$serv[0].",3);> <img class=img_boton src=img/facebook.png title=Compartir en Facebook onclick=compartirFace(".$serv[0].",1);><a href=https://twitter.com/share?url=".$CM_path_web."?ptot=1&pto=".$serv[0]."&via=chilemap&text=Revisa este link target=_BLANK><img  class=img_boton src=img/twitter.png title=Compartir en Twitter></a></div>"; 
 		$data_categoria=getServicioCategoria($serv[9]);
 		$icono=$data_categoria[2];
@@ -194,6 +195,63 @@ if(strtolower($data_server[0])==$CM_path_base2 or strtolower($data_server[0])==$
 			$texto .="<div class=titulo_pop_descrip>".ucwords($dat[11])."</div>";
 		}
 		$texto .="<div class=titulo_pop3>".ucwords($dat[5])."</div>"; 
+		if($dat[0]==32)
+		{
+			$fec=getFechaLibre(15);
+			$fecha=getFecha();
+			
+			$detalle1=getDetalleServ(" and id_servicio=".$dat[12]." and texto4='1' and fecha_registro >='".$fec."' order by fecha_registro desc limit 1"); //dinero
+			$detalle2=getDetalleServ(" and id_servicio=".$dat[12]." and texto4='2' and fecha_registro >='".$fec."'  order by fecha_registro desc limit 1"); //habilitado
+			if(count($detalle1) ==0)
+			{
+				
+				$est_d="No hay registro";
+			}else
+			{
+				
+				$tiempo= segundos($detalle1[0][7],$fecha);
+				if($tiempo/60 < 60)
+				{
+					$txt_mini="Hace ".($tiempo/60)." min";
+				}else
+				{
+					$tot=($tiempo/60);
+					$tot=round($tot/60,2);
+					$txt_mini="Hace ".$tot." hrs";
+				}
+				$est_d=" ".$detalle1[0][3]." <span class=titulo_mini>(".$txt_mini.")</span>";
+				
+				
+			}
+			if(count($detalle2) ==0)
+			{
+				$est_c="No hay registro";
+				
+			}else
+			{
+				$tiempo= segundos($detalle2[0][7],$fecha);
+				if($tiempo/60 < 60)
+				{
+					$txt_mini="Hace ".($tiempo/60)." min";
+				}else
+				{
+					$tot=($tiempo/60);
+					$tot=round($tot/60,2);
+					$txt_mini="Hace ".$tot." hrs";
+				}
+				$est_c=" ".$detalle2[0][3]." <span class=titulo_mini>(".$txt_mini.")</span>";
+				
+			}
+			
+			$texto .="<hr><div class=titulo_pop40>Cajero habilitado:  ".$est_c."</div>"; 
+			$texto .="<div class=titulo_pop40><hr>Hay dinero: ".$est_d."</div>"; 
+			$texto .="<div class=titulo_mini>*La consulta es menor a 12 horas</div>"; 				
+			$texto .="<div class=titulo_pop_descrip> <strong>Ayuda a la comunidad!</strong>";
+			$texto .="<br>El cajero esta habilitado? <br><input type='button' value='Si' class='btn_pop' onclick='addDescripCajero(2,0,".$dat[12].");'> <input type='button' value='No' class='btn_pop' onclick='addDescripCajero(2,1,".$dat[12].");'>";
+			$texto .="<br>El cajero cuenta con dinero? <br><input type='button' value='Si' class='btn_pop' onclick='addDescripCajero(1,0,".$dat[12].");'> <input class='btn_pop' type='button' value='No' onclick='addDescripCajero(1,1,".$dat[12].");'>";
+			$texto .="</div>";
+			$texto .="<div class=titulo_pop3  id=mini_resp></div>";
+		}
 		//$texto .="<div id=botonera><img class=img_boton src=img/favorito.png title=Agregar a favoritos onclick=javascript:addFavorito(".$estado_sesion.",".$dat[0].",3);><img class=img_boton src=img/mail.png title=Enviar por correo onclick=compartirPto(".$dat[0].",3);> <img class=img_boton src=img/facebook.png title=Compartir en Facebook onclick=compartirFace(".$dat[0].");><a href=https://twitter.com/share?url=".$CM_path_web."?ptot=1&pto=".$dat[0]."&via=chilemap&text=Revisa este link target=_BLANK><img  class=img_boton src=img/twitter.png title=Compartir en Twitter></a></div>"; 
 			
 	
@@ -219,7 +277,7 @@ if(strtolower($data_server[0])==$CM_path_base2 or strtolower($data_server[0])==$
 		foreach($datos as $d)
 		{
 				$texto="<div class=titulo>".strtoupper($d[4])."</div>";
-		$texto .="<div class=titulo_pop2>".ucwords(utf8_decode($d[1]))."</div>";
+				$texto .="<div class=titulo_pop2>".ucwords(utf8_decode($d[1]))."</div>";
 		$texto .='<div id=titulo_pop3>Parada de:</div>';
 		$texto .=strtoupper($d[5]);
 			
@@ -841,6 +899,23 @@ if(strtolower($data_server[0])==$CM_path_base2 or strtolower($data_server[0])==$
 			</Script>
 		<?php
 	}
+}elseif($_REQUEST['tipo']==22)
+{
+	$tipo=$_REQUEST['tipo_data'];
+	$valor=$_REQUEST['valor'];
+	if($valor==0)
+	  $valor="Si";
+	if($valor==1)
+	  $valor="No";
+	  
+	$data=array();
+	$data[]=$_REQUEST['serv'];
+	$data[]="";
+	$data[]=$valor;
+	$data[]="";
+	$data[]=$tipo;
+	$data[]="";	
+	addServicioDetalle($data);
 }
 }
 ?>

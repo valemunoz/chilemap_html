@@ -907,7 +907,7 @@ function getServicioExtend($id_serv,$latI,$latS,$lonD,$lonI)
 {
 	$dbPg=pgSql_db();
 	
-	$sql2 = "SELECT id_categoria,latitud,longitud,calle,numero_municipal,comuna,region,id_comuna,id_region,categoria,nombre_servicio,descripcion FROM gis_servicios where id_categoria=".$id_serv." and latitud<=".$latS." and latitud >=".$latI." and longitud <=".$lonD." and longitud >=".$lonI."";		
+	$sql2 = "SELECT id_categoria,latitud,longitud,calle,numero_municipal,comuna,region,id_comuna,id_region,categoria,nombre_servicio,descripcion,id_servicio FROM gis_servicios where id_categoria=".$id_serv." and latitud<=".$latS." and latitud >=".$latI." and longitud <=".$lonD." and longitud >=".$lonI."";		
   $rs2 = pg_query($dbPg, $sql2);
 	//echo "<br>".$sql2;
 	while ($row2 = pg_fetch_row($rs2))
@@ -925,6 +925,7 @@ function getServicioExtend($id_serv,$latI,$latS,$lonD,$lonI)
 	   $data[]=$row2[9];	
 	   $data[]=$row2[10];	
 	   $data[]=$row2[11];	
+	      $data[]=$row2[12];	
 			$datos[]=$data;
 	}
 	pg_close($dbPg);
@@ -1487,6 +1488,57 @@ function getFecha()
 {
 	$fecha=date("Y-m-d H:i:s");
 	$fecha_actual2 = strtotime ( '-3 hours ' , strtotime ( $fecha ) ) ;
+	$fec = date ( 'Y-m-d H:i:s' , $fecha_actual2 );
+	return $fec;
+}
+
+function addServicioDetalle($data)
+{
+	$dbPg=pgSql_db();
+	
+	$sql2 = utf8_encode("INSERT INTO gis_servicio_detalle(
+            id_servicio, url, descripcion, telefono, texto4, 
+            texto5, fecha_registro)
+    VALUES ('".$data[0]."', '".$data[1]."', '".$data[2]."', '".$data[3]."', '".$data[4]."', 
+            '".$data[5]."', '".getFecha()."')");		
+  $rs2 = pg_query($dbPg, $sql2);
+	
+	pg_close($dbPg);
+	
+}
+function getDetalleServ($qr)
+{
+	$dbPg=pgSql_db();		
+	
+	$sql="SELECT id_detalle, id_servicio, url, descripcion, telefono, texto4, 
+       texto5, fecha_registro
+  FROM gis_servicio_detalle where 1=1";
+  if(trim($qr)!="")
+  {
+  	$sql .=$qr;
+  }
+	$rsCalle = pg_query($dbPg, $sql);	
+		//echo $sql;
+		$data_arr=array();
+	while ($row2 = pg_fetch_row($rsCalle)){	
+		$data=array();
+		$data[]=$row2[0];	
+		$data[]=$row2[1];	
+		$data[]=$row2[2];	
+		$data[]=$row2[3];	
+		$data[]=$row2[4];	
+		$data[]=$row2[5];	
+		$data[]=$row2[6];	
+		$data[]=$row2[7];	
+		$data_arr[]=$data;
+	}
+	pg_close($dbPg);
+	return $data_arr;
+}
+function getFechaLibre($horas)
+{
+	$fecha=date("Y-m-d H:i:s");
+	$fecha_actual2 = strtotime ( '-'.$horas.' hours ' , strtotime ( $fecha ) ) ;
 	$fec = date ( 'Y-m-d H:i:s' , $fecha_actual2 );
 	return $fec;
 }

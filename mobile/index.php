@@ -1,7 +1,38 @@
 <?php
 include("../includes/funciones.php");
+require_once("includes/Mobile_Detect.php");
 $estado_sesion=estado_sesion();
 $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
+//$CM_path_base2="http://www.chilemap.cl/index_mapa.php";
+
+
+$meta = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip='.$_SERVER['REMOTE_ADDR']));
+$latitud = $meta['geoplugin_latitude'];
+$longitud = $meta['geoplugin_longitude'];
+$ciudad = $meta['geoplugin_city'];
+if(is_numeric($latitud) and is_numeric($longitud) and $latitud!=0 and $longitud!=0)
+{
+	?>
+	<script>
+		LAT_INI="<?=$latitud?>";
+		LON_INI="<?=$longitud?>";
+		
+	</script>
+	<?php
+}
+$detect = new Mobile_Detect;
+$deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
+$data_server= explode("?",$_SERVER['REQUEST_URI']);
+if($deviceType=="computer")
+{
+	?>
+		<script>
+			//window.location="<?=$CM_path_base2?>?<?=$data_server[1]?>";
+	</script>
+	<?php
+	
+}
+
 ?>
 <html>
     <head>
@@ -45,7 +76,7 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
 				</div><!-- /panel -->
 					<div data-role="panel" id="mypanel2" data-theme="a" style="z-index:99999;" data-position="left" data-display="overlay">
     	  		<a href="#mypanel" data-iconpos="top" data-rel="close" data-icon="delete" data-role="button" data-iconpos="notext"></a>
-    			  <input type="text" id="qr" name="qr" placeholder="Luis valdes 2557 puente alto / Banco" data-inline="true">
+    			  <input type="search" id="qr" name="qr" placeholder="Luis valdes 2557 puente alto / Banco" data-inline="true">
     			  
 
     			  <input type="button" value="Buscar" onclick="buscar();" data-inline="true">
@@ -74,7 +105,9 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
     	  	<div data-role="popup" id="myPopup">
 							<p>This is a completely basic popup, no options set.						</p>
 					</div>
-					
+					<div data-role="popup" id="myPopup2">
+							<p>This is a completely basic popup, no options set.						</p>
+					</div>
 					
 					<div id="contenido_sesion">
 						<div class="ui-bar ui-bar-a" style="text-align:right;">
@@ -402,6 +435,15 @@ $CM_path_base2="http://localhost/chilemap_html/index_mapa.php";
   }
   
 	</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
+  ga('create', 'UA-45595484-1', 'chilemap.cl');
+  ga('send', 'pageview');
+
+</script>
     </body>
 </html>

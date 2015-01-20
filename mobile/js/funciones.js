@@ -3,6 +3,9 @@ var SIS_LON=0;
 var SIS_LAT=0;
 var bar2="";
 
+var LAT_INI=-33.458943;
+var LON_INI=-70.656235;
+	
 var SIS_ACCU=0;
 var SIS_CALLE="";
 var SIS_NUM="";
@@ -99,7 +102,7 @@ function loadMapa()
 {
 	//init('-70.444','-30.988',15);
 	init();
-	moverCentro(-33.458943,-70.656235,12);
+	moverCentro(LAT_INI,LON_INI,12);
 }
 function ubicacionActual()
 {
@@ -553,4 +556,16 @@ function loadRecupera()
 				}
 		);		
 		}
+}
+
+function addDescripCajero(tipo,valor,id_serv)
+{
+	
+	$("#output").load("includes/query.php", 
+			{tipo:22, tipo_data:tipo, valor:valor,serv:id_serv} 
+				,function(){						
+					//hideMensaje("myPopup")
+					$("#mini_resp").html("Gracias por la informaci&oacute;n");
+				}
+		);		
 }
