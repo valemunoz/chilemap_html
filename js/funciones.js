@@ -576,11 +576,13 @@ function loadFarmaTurno()
 
 function loadFarma()
 {
+	$('.cont_web').html("Buscando...<br><img src='images/495.gif'>");
+ $('#popup_web').fadeIn('fast');
 	var AM_exten = getExtencion();
 	$("#output").load("query_mapa.php", 
 			{tipo:11, loni:AM_exten.left, lati:AM_exten.bottom, lond:AM_exten.right, lats:AM_exten.top} 
 				,function(){	
-					
+					closeModalWeb();
 				}
 		);
 }
